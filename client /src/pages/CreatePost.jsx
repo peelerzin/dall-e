@@ -31,18 +31,15 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch(
-          "http://localhost:8080/api/v1/dalle",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              prompt: form.prompt,
-            }),
-          }
-        );
+        const response = await fetch("http://localhost:8080/api/v1/dalle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prompt: form.prompt,
+          }),
+        });
 
         const data = await response.json();
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
@@ -57,31 +54,34 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // implement the share button
+    e.preventDefault(); // prevent the page from refreshing
 
     if (form.prompt && form.photo) {
-      setLoading(true);
+      //check if we have prompt and photo
+      setLoading(true); // if yes setloading to true
       try {
         const response = await fetch(
-          "https://dalle-arbb.onrender.com/api/v1/post",
+          "http://localhost:8080/api/v1/post", //call post image route
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...form }),
+            body: JSON.stringify(form), // sending the form data
           }
         );
 
-        await response.json();
-        alert("Success");
-        navigate("/");
+        await response.json(); // wait for the response
+        navigate("/"); //return home to see our image
       } catch (err) {
         alert(err);
       } finally {
+        // loading is reset to false
         setLoading(false);
       }
     } else {
+      // if no photo or prompt then
       alert("Please generate an image with proper details");
     }
   };

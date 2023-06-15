@@ -1,5 +1,5 @@
 import { surpriseMePrompts } from "../constants";
-
+import FileSaver from "file-saver";
 // function in utils are reusable in the whole app, this one returns a random prompt for images that we got from constants files.
 export function getRandomPrompt() {
   const randomIndex = Math.floor(Math.random() * surpriseMePrompts.length);
@@ -8,4 +8,8 @@ export function getRandomPrompt() {
   if (randomPrompt === prompt) return getRandomPrompt(prompt);
 
   return randomPrompt;
+}
+
+export async function downloadImage(_id, photo) {
+  FileSaver.saveAs(photo, `download-${_id}.jpg`);
 }
